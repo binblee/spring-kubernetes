@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book-deployment
+  labels:
+    app: book
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: book
+  template:
+    metadata:
+      labels:
+        app: book
+    spec:
+      containers:
+      - name: book
+        image: book-service:0.0.1
+        ports:
+        - containerPort: 8080
+        resources: {}
+        env:
+          - name: RATING_SERVICE_URL 
+            valueFrom:
+              configMapKeyRef:
+                name: booksvc-cm
+                key: rating_service_url
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /actuator/health/readiness
+        livenessProbe:
+          httpGet:
+            port: 8080
+            path: /actuator/health/liveness
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: book-service
+spec:
+  type: ClusterIP
+  selector:
+    app: book
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: booksvc-cm
+data:
+  rating_service_url: "http://rating-service:8080"
+

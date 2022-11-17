@@ -1,0 +1,21 @@
+version: '2'
+services:
+  book-svc:
+    build:
+      context: ../book-service
+      # comment out blow if you want to build in docker
+      dockerfile: ../book-service/Dockerfile.cp
+    image: book-service:0.0.1
+    ports: 
+      - "8081:8080"
+    environment:
+      - JAVA_OPTS=
+        -DRATING_SERVICE_URL=http://rating-svc:8080
+  rating-svc:
+    build:
+      context: ../rating-service
+      # comment out blow if you want to build in docker
+      dockerfile: ../book-service/Dockerfile.cp
+    image: rating-service:0.0.1
+    ports: 
+      - "8082:8080"
