@@ -66,7 +66,7 @@ Crate a Kind cluster with nginx ingress follow this guide: [https://kind.sigs.k8
 
 Change to [kind/cluster](kind/cluster/) directory:
 ```
-➜  cat kind-cluster.yaml | kind create cluster --config=-
+➜  kind create cluster --config kind-cluster.yaml
 ➜  kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 ```
 
