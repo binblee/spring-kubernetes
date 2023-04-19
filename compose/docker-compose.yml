@@ -15,7 +15,7 @@ services:
     build:
       context: ../rating-service
       # comment out blow if you want to build in docker
-      dockerfile: ../book-service/Dockerfile.cp
+      dockerfile: ../rating-service/Dockerfile.cp
     image: rating-service:0.0.1
     ports: 
       - "8082:8080"
