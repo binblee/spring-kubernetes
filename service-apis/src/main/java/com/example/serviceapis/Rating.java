@@ -1,4 +1,4 @@
-package com.example.ratingservice;
+package com.example.serviceapis;
 
 public class Rating {
     private Long id;
