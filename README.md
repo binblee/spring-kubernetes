@@ -94,8 +94,61 @@ Verify two services up and running:
 [{"id":1,"bookId":1,"stars":2},{"id":2,"bookId":1,"stars":3}]
 ```
 
+### Ingress
+
+A sample nginx ingress [kubernetes/minikube/app/ingress.yaml](kubernetes/minikube/app/ingress.yaml) has been tested on minikube. 
+
+```
+$ kubectl apply -f kubernetes/minikube/app
+```
+
+Turn on minikube tunnel 
+
+```
+$ minikube tunnel
+```
+
+Book service can be accessed by `<ingress endpoint>/b/...`, for example:
+```
+$ curl http://localhost/b/books/1/ratings
+[{"id":1,"bookId":1,"stars":2},{"id":2,"bookId":1,"stars":3}]%
+```
+
+Access rating service by `<ingress endpoint>/r/...`
+
+```
+$ curl http://localhost/r/
+rating service ok%
+```
+
+### Prometheus
+
+The two services can be monitored by prometheus.  Install [kube-prometheus stack](https://github.com/prometheus-operator/kube-prometheus) in minikube. Followed by deploy servicemonitors.
+
+```
+$ kubectl apply -f kubernetes/minikube/prometheus
+```
+
+You would see two service monitors created.
+```
+ kubectl get servicemonitor
+NAME                     AGE
+book-service-monitor     31m
+rating-service-monitor   31m
+```
+
+Verify the `Status/Targets` in prometheus.
+
+![](img/prometheus_%20targets.png)
+
+Import [JVM Mircometer](https://grafana.com/grafana/dashboards/4701) dashboard from the Grafana website.
+
+![](img/grafana_micrometer.png)
+
+
 ## Reference Documentation
 
 * [Spring on Kubernetes! workshop](https://hackmd.io/@ryanjbaxter/spring-on-k8s-workshop)
 * [Create an OCI image](https://docs.spring.io/spring-boot/docs/2.7.5/maven-plugin/reference/html/#build-image)
+* [Gathering Metrics from Spring Boot on Kubernetes with Prometheus and Grafana](https://tanzu.vmware.com/developer/guides/spring-prometheus/)
 

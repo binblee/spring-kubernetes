@@ -59,18 +59,3 @@ metadata:
   name: booksvc-cm
 data:
   rating_service_url: "http://rating-service:8080"
-
----
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  labels:
-    release: prometheus
-  name: book-service-monitor
-spec:
-  endpoints:
-  - port: http-traffic
-    path: /actuator/prometheus
-  selector:
-    matchLabels:
-      appsvc: book

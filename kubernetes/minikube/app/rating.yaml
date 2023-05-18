@@ -45,18 +45,3 @@ spec:
       name: http-traffic
       port: 8080
       targetPort: 8080
-
----
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  labels:
-    release: prometheus
-  name: rating-service-monitor
-spec:
-  endpoints:
-  - port: http-traffic
-    path: /actuator/prometheus
-  selector:
-    matchLabels:
-      appsvc: rating
