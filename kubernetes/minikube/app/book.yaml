@@ -40,12 +40,15 @@ apiVersion: v1
 kind: Service
 metadata:
   name: book-service
+  labels:
+    appsvc: book
 spec:
   type: ClusterIP
   selector:
     app: book
   ports:
     - protocol: TCP
+      name: http-traffic
       port: 8080
       targetPort: 8080
 
@@ -57,3 +60,17 @@ metadata:
 data:
   rating_service_url: "http://rating-service:8080"
 
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    release: prometheus
+  name: book-service-monitor
+spec:
+  endpoints:
+  - port: http-traffic
+    path: /actuator/prometheus
+  selector:
+    matchLabels:
+      appsvc: book
